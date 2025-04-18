@@ -1,12 +1,12 @@
 package com.olim.employeemanagementsystem.db;
 
 import com.olim.employeemanagementsystem.model.Employee;
+import com.olim.employeemanagementsystem.service.SearchService;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class EmployeeDatabase<T> {
+public class EmployeeDatabase<T> implements SearchService<T> {
     private final  HashMap<T, Employee<T>> employees;
 
     public EmployeeDatabase(HashMap<T, Employee<T>> employees) {
@@ -89,4 +89,61 @@ public class EmployeeDatabase<T> {
     public Collection<Employee<T>> getAllEmployees() {
         return employees.values();
     }
+
+    @Override
+    public List<Employee<T>> findByDepartment(String department) {
+        return getAllEmployees()
+                .stream()
+                .filter(emp -> emp.getDepartment().equals(department))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Employee<T>> findByName(String name) {
+        return getAllEmployees()
+                .stream()
+                .filter(emp -> emp.getName().equals(name))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<Employee<T>> findByRating(double rating) {
+        return getAllEmployees()
+                .stream()
+                .filter(emp -> emp.getPerformanceRating() >= rating)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Employee<T>> findBySalaryBetween(double min, double max) {
+        return getAllEmployees()
+                .stream()
+                .filter(emp -> (emp.getSalary() > max && emp.getSalary() < min))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public void displayAll() {
+        Iterator<Employee<T>> employeeIterator = getAllEmployees().iterator();
+        System.out.println("|----------|-------------------------|------------|----------|----------|------------|----------|");
+        System.out.printf("|%-10s|%-25s|%-12s|%-10s|%-8s|%-12s|%-10s|\n",
+                "EmpId", "Name", "Department", "Performance", "Experience", "Salary", "Status");
+        System.out.println("|----------|-------------------------|------------|----------|----------|------------|----------|");
+        while(employeeIterator.hasNext()){
+            Employee<T> employee = employeeIterator.next();
+            System.out.printf("|%-10s|%-25s|%-12s|%-10.1f|%-10d|$%-11.2f|%-10s|\n",
+                    employee.getEmployeeId(),
+                    employee.getName(),
+                    employee.getDepartment(),
+                    employee.getPerformanceRating(),
+                    employee.getYearsOfExperience(),
+                    employee.getSalary(),
+                    employee.isActive() ? "Active" : "Inactive");
+        }
+    }
+    @Override
+    public Map<String, List<Employee<T>>> groupByDepartment() {
+        return getAllEmployees()
+                .stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment));
+    }
+
 }
