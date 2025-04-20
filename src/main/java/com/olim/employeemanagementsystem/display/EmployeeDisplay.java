@@ -86,8 +86,8 @@ public class EmployeeDisplay {
                 .mapToDouble(Employee::getSalary)
                 .average()
                 .orElse(0.0);
-        System.out.printf("| %-16s | %9d | %16.2f |%n",
-                "Outstanding (≥4.5)", outstandingEmps.size(), outstandingAvgSalary);
+        System.out.printf("| Outstanding      | %9d | %16.2f |%n",
+                outstandingEmps.size(), outstandingAvgSalary);
 
         // Excellent (4.0-4.4)
         List<Employee<T>> excellentEmps = employees.stream()
@@ -97,8 +97,8 @@ public class EmployeeDisplay {
                 .mapToDouble(Employee::getSalary)
                 .average()
                 .orElse(0.0);
-        System.out.printf("| %-16s | %9d | %16.2f |%n",
-                "Excellent (4.0-4.4)", excellentEmps.size(), excellentAvgSalary);
+        System.out.printf("| Excellent        | %9d | %16.2f |%n",
+                excellentEmps.size(), excellentAvgSalary);
 
         // Good (3.5-3.9)
         List<Employee<T>> goodEmps = employees.stream()
@@ -108,8 +108,8 @@ public class EmployeeDisplay {
                 .mapToDouble(Employee::getSalary)
                 .average()
                 .orElse(0.0);
-        System.out.printf("| %-16s | %9d | %16.2f |%n",
-                "Good (3.5-3.9)", goodEmps.size(), goodAvgSalary);
+        System.out.printf("| Good             | %9d | %16.2f |%n",
+                goodEmps.size(), goodAvgSalary);
 
         // Average (3.0-3.4)
         List<Employee<T>> averageEmps = employees.stream()
@@ -119,8 +119,8 @@ public class EmployeeDisplay {
                 .mapToDouble(Employee::getSalary)
                 .average()
                 .orElse(0.0);
-        System.out.printf("| %-16s | %9d | %16.2f |%n",
-                "Average (3.0-3.4)", averageEmps.size(), averageAvgSalary);
+        System.out.printf("| Average          | %9d | %16.2f |%n",
+                averageEmps.size(), averageAvgSalary);
 
         // Below Average (<3)
         List<Employee<T>> belowAvgEmps = employees.stream()
@@ -130,10 +130,18 @@ public class EmployeeDisplay {
                 .mapToDouble(Employee::getSalary)
                 .average()
                 .orElse(0.0);
-        System.out.printf("| %-16s | %9d | %16.2f |%n",
-                "Below Average (<3)", belowAvgEmps.size(), belowAvgSalary);
+        System.out.printf("| Below Average    | %9d | %16.2f |%n",
+                belowAvgEmps.size(), belowAvgSalary);
 
         System.out.println("+------------------+-----------+------------------+");
+
+        // Add a legend to explain the rating ranges
+        System.out.println("\nPerformance Rating Ranges:");
+        System.out.println("- Outstanding:    ≥4.5");
+        System.out.println("- Excellent:      4.0-4.4");
+        System.out.println("- Good:           3.5-3.9");
+        System.out.println("- Average:        3.0-3.4");
+        System.out.println("- Below Average:  <3.0");
     }
     //Display format reports by having salary ranges
     public static <T> void generateSalaryDistributionReport(Collection<Employee<T>> employees) {
