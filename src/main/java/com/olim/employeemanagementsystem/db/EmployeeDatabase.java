@@ -1,12 +1,16 @@
 package com.olim.employeemanagementsystem.db;
 
+import com.olim.employeemanagementsystem.compartor.EmployeePerformanceComparator;
+import com.olim.employeemanagementsystem.compartor.EmployeeSalaryComparator;
 import com.olim.employeemanagementsystem.model.Employee;
 import com.olim.employeemanagementsystem.service.SearchService;
+import com.olim.employeemanagementsystem.service.SortService;
+import eu.hansolo.tilesfx.Command;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class EmployeeDatabase<T> implements SearchService<T> {
+public class EmployeeDatabase<T> implements SearchService<T>, SortService<T> {
     private final  HashMap<T, Employee<T>> employees;
 
     public EmployeeDatabase(HashMap<T, Employee<T>> employees) {
@@ -146,4 +150,26 @@ public class EmployeeDatabase<T> implements SearchService<T> {
                 .collect(Collectors.groupingBy(Employee::getDepartment));
     }
 
+    @Override
+    public List<Employee<T>> findSortedBySalary() {
+        return employees.values()
+                .stream()
+                .sorted(new EmployeeSalaryComparator<>())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Employee<T>> findSortedByPerformanceRating() {
+        return employees.values()
+                .stream()
+                .sorted(new EmployeePerformanceComparator<>())
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<Employee<T>> findSortedByExperience() {
+        return employees.values()
+                .stream()
+                .sorted()
+                .collect(Collectors.toList());
+    }
 }
