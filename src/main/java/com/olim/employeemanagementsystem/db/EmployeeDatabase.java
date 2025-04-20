@@ -3,6 +3,7 @@ package com.olim.employeemanagementsystem.db;
 import com.olim.employeemanagementsystem.compartor.EmployeePerformanceComparator;
 import com.olim.employeemanagementsystem.compartor.EmployeeSalaryComparator;
 import com.olim.employeemanagementsystem.model.Employee;
+import com.olim.employeemanagementsystem.service.SalaryManagementService;
 import com.olim.employeemanagementsystem.service.SearchService;
 import com.olim.employeemanagementsystem.service.SortService;
 import eu.hansolo.tilesfx.Command;
@@ -10,7 +11,7 @@ import eu.hansolo.tilesfx.Command;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class EmployeeDatabase<T> implements SearchService<T>, SortService<T> {
+public class EmployeeDatabase<T> implements SearchService<T>, SortService<T>, SalaryManagementService<T> {
     private final  HashMap<T, Employee<T>> employees;
 
     public EmployeeDatabase(HashMap<T, Employee<T>> employees) {
@@ -172,4 +173,50 @@ public class EmployeeDatabase<T> implements SearchService<T>, SortService<T> {
                 .sorted()
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Employee<T>> giveSalaryRaiseByPerformanceRating(double performanceRating,double percentageRaise) {
+        return employees.values()
+                .stream()
+                .filter(emp -> emp.getPerformanceRating() >= performanceRating)
+                .map(emp -> {
+                    emp.setSalary(emp.getSalary() + emp.getSalary() * percentageRaise);
+                    return emp;
+                }).collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<Employee<T>> findTopHighestPaid() {
+        return findSortedBySalary()
+                .stream()
+                .limit(5)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Employee<T>> findTopHighestPaid(int numberOfEmployees) {
+        return findSortedBySalary()
+                .stream()
+                .limit(numberOfEmployees)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public double calculateAverageSalaryByDepartment(String department) {
+         return getAllEmployees()
+                .stream()
+                 .filter(emp -> emp.getDepartment().equalsIgnoreCase(department))
+                 .mapToDouble(Employee::getSalary)
+                 .average()
+                 .orElse(0.0);
+    }
+    @Override
+    public Map<String, Double> calculateAverageSalaryPerDepartment(){
+        return getAllEmployees()
+                .stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment,Collectors.averagingDouble(Employee::getSalary)));
+
+    }
+
 }
