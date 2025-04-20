@@ -1,4 +1,4 @@
-package com.olim.employeemanagementsystem.compartor;
+package com.olim.employeemanagementsystem.comparator;
 
 import com.olim.employeemanagementsystem.model.Employee;
 
