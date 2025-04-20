@@ -106,7 +106,7 @@ return database.getAllEmployees().stream()
    java -jar target/EmployeeManagementSystem-1.0-SNAPSHOT.jar
    ```
 ## video-link
-    link
+    https://screenrec.com/share/ghRLbouMAc
 
 ## Documentation
 
