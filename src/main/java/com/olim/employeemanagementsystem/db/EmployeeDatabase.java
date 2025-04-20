@@ -1,12 +1,11 @@
 package com.olim.employeemanagementsystem.db;
 
-import com.olim.employeemanagementsystem.compartor.EmployeePerformanceComparator;
-import com.olim.employeemanagementsystem.compartor.EmployeeSalaryComparator;
+import com.olim.employeemanagementsystem.comparator.EmployeePerformanceComparator;
+import com.olim.employeemanagementsystem.comparator.EmployeeSalaryComparator;
 import com.olim.employeemanagementsystem.model.Employee;
 import com.olim.employeemanagementsystem.service.SalaryManagementService;
 import com.olim.employeemanagementsystem.service.SearchService;
 import com.olim.employeemanagementsystem.service.SortService;
-import eu.hansolo.tilesfx.Command;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -216,7 +215,6 @@ public class EmployeeDatabase<T> implements SearchService<T>, SortService<T>, Sa
         return getAllEmployees()
                 .stream()
                 .collect(Collectors.groupingBy(Employee::getDepartment,Collectors.averagingDouble(Employee::getSalary)));
-
     }
 
 }
